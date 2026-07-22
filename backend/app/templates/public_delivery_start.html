@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Pedido delivery</h2>
+  <p class="note">Ingrese datos de contacto y seleccione el primer ítem del pedido.</p>
+</div>
+
+<div class="card">
+  <form method="post" action="/cliente/delivery/start">
+    <div class="grid">
+      <div>
+        <label>Nombre</label>
+        <input name="name" required/>
+      </div>
+      <div>
+        <label>Teléfono</label>
+        <input name="phone" required/>
+      </div>
+      <div>
+        <label>Dirección</label>
+        <input name="address_line" required/>
+      </div>
+      <div>
+        <label>Producto</label>
+        <select name="product_id">
+          {% for p in products %}<option value="{{ p.id }}">{{ p.name }} - {{ "%.2f"|format(p.price) }}</option>{% endfor %}
+        </select>
+      </div>
+      <div>
+        <label>Cantidad</label>
+        <input type="number" name="quantity" value="1" min="1"/>
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+      <button class="btn" type="submit">Crear pedido</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

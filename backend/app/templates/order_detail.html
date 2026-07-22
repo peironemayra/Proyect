@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Pedido {{ order.code }}</h2>
+  <div class="flex">
+    <div><span class="badge">{{ order.channel.value }}</span></div>
+    <div><span class="badge">{{ order.status.value }}</span></div>
+    <div class="note">
+      {% if order.table %}Mesa: {{ order.table.code }}{% endif %}
+      {% if order.customer %}Cliente: {{ order.customer.name }}{% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Ítems</h3>
+  <table>
+    <thead>
+      <tr><th>Producto</th><th>Área</th><th>Cantidad</th><th>Precio</th><th>Estado</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for it in order.items %}
+      <tr>
+        <td>{{ it.product.name }}</td>
+        <td><span class="badge">{{ it.area.value }}</span></td>
+        <td>{{ it.quantity }}</td>
+        <td>{{ "%.2f"|format(it.unit_price) }}</td>
+        <td><span class="badge">{{ it.status.value }}</span></td>
+        <td>
+          {% if can_edit %}
+          <form class="inline" method="post" action="/orders/{{ order.id }}/remove_item/{{ it.id }}">
+            <button class="btn danger small" type="submit">Quitar</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="flex" style="margin-top:10px;">
+    <div style="min-width:200px;">
+      <div class="note">Subtotal: {{ "%.2f"|format(subtotal) }}</div>
+      <div class="note">Descuento: {{ "%.1f"|format(order.discount_pct or 0) }}%</div>
+      <div><strong>Total: {{ "%.2f"|format(total) }}</strong></div>
+    </div>
+
+    <div style="min-width:280px;">
+      <form method="post" action="/orders/{{ order.id }}/discount">
+        <label>Descuento %</label>
+        <input type="number" step="0.5" name="discount_pct" value="{{ order.discount_pct or 0 }}"/>
+        <button class="btn secondary small" type="submit">Aplicar</button>
+      </form>
+      <p class="note">El sistema aplica descuento a nivel de pedido.</p>
+    </div>
+  </div>
+</div>
+
+{% if can_edit %}
+<div class="card">
+  <h3>Agregar ítem</h3>
+  <form method="post" action="/orders/{{ order.id }}/add_item">
+    <div class="grid">
+      <div>
+        <label>Producto</label>
+        <select name="product_id">
+          {% for p in products %}
+            <option value="{{ p.id }}">{{ p.name }} ({{ p.category.name }}) - {{ "%.2f"|format(p.price) }} - {{ p.area.value }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label>Cantidad</label>
+        <input type="number" name="quantity" value="1" min="1"/>
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+      <button class="btn" type="submit">Agregar</button>
+    </div>
+  </form>
+</div>
+{% endif %}
+
+<div class="card">
+  <h3>Acciones</h3>
+  <div class="flex">
+    <form class="inline" method="post" action="/orders/{{ order.id }}/send">
+      <button class="btn" type="submit">Enviar a cocina y bar</button>
+    </form>
+    <form class="inline" method="post" action="/orders/{{ order.id }}/cancel">
+      <button class="btn danger" type="submit">Cancelar</button>
+    </form>
+    <a class="btn secondary" href="/orders">Volver</a>
+  </div>
+  <p class="note">Luego de enviar, cocina y bar actualizan los estados de preparación.</p>
+</div>
+{% endblock %}

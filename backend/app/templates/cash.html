@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Caja</h2>
+  {% if cash_session %}
+    <div class="note">Caja abierta desde {{ cash_session.opened_at.strftime("%Y-%m-%d %H:%M") }}. Monto apertura: {{ "%.2f"|format(cash_session.opening_amount) }}</div>
+  {% else %}
+    <div class="note">No existe caja abierta.</div>
+  {% endif %}
+</div>
+
+{% if not cash_session %}
+<div class="card">
+  <h3>Abrir caja</h3>
+  <form method="post" action="/cash/open">
+    <div class="flex">
+      <div style="min-width:240px;">
+        <label>Monto inicial</label>
+        <input type="number" step="0.01" name="opening_amount" value="0"/>
+      </div>
+      <div><button class="btn" type="submit">Abrir</button></div>
+    </div>
+  </form>
+</div>
+{% else %}
+<div class="card">
+  <h3>Cerrar caja</h3>
+  <form method="post" action="/cash/close">
+    <div class="flex">
+      <div style="min-width:240px;">
+        <label>Monto cierre</label>
+        <input type="number" step="0.01" name="closing_amount" value="{{ "%.2f"|format(cash_session.closing_amount or 0) }}"/>
+      </div>
+      <div><button class="btn danger" type="submit">Cerrar</button></div>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <h3>Pedidos listos por cobrar</h3>
+  <table>
+    <thead>
+      <tr><th>Pedido</th><th>Canal</th><th>Total</th><th>Método</th><th>Recibido</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for o in pending_orders %}
+      <tr>
+        <td><a href="/orders/{{ o.id }}">{{ o.code }}</a></td>
+        <td><span class="badge">{{ o.channel.value }}</span></td>
+        <td>{{ "%.2f"|format(totals[o.id]) }}</td>
+        <td colspan="3">
+          <form method="post" action="/cash/pay/{{ o.id }}">
+            <div class="flex">
+              <div style="min-width:160px;">
+                <select name="method_value">
+                  {% for m in methods %}<option value="{{ m }}">{{ m }}</option>{% endfor %}
+                </select>
+              </div>
+              <div style="min-width:160px;">
+                <input type="number" step="0.01" name="amount_received" value="0"/>
+              </div>
+              <div>
+                <button class="btn small" type="submit">Registrar pago</button>
+              </div>
+            </div>
+          </form>
+          <div class="note">En efectivo, registre monto recibido para cálculo de vuelto.</div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class="note">El total del pedido se calcula en el detalle del pedido. En caja se registra el pago y el comprobante.</p>
+</div>
+{% endif %}
+{% endblock %}

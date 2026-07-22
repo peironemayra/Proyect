@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Ingreso al sistema</h2>
+  {% if error %}
+    <div class="error">{{ error }}</div>
+  {% endif %}
+  <form method="post" action="/login">
+    <div class="grid">
+      <div>
+        <label>Usuario</label>
+        <input name="username" required/>
+      </div>
+      <div>
+        <label>Contraseña</label>
+        <input type="password" name="password" required/>
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+      <button class="btn" type="submit">Ingresar</button>
+    </div>
+  </form>
+  <p class="note" style="margin-top:10px;">Si es la primera ejecución, ejecute el script de inicialización para crear usuarios y datos de prueba.</p>
+</div>
+{% endblock %}

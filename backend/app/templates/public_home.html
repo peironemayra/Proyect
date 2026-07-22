@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Inicio</h2>
+  <p class="note">Seleccione un modo de acceso.</p>
+  <div class="flex">
+    <a class="btn" href="/login">Acceso personal</a>
+    <a class="btn secondary" href="/cliente/delivery">Pedido delivery</a>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Modo QR en mesa</h3>
+  <p class="note">Acceso por URL del tipo /cliente/qr/M01. Para pruebas, cree mesas desde el panel y abra el enlace QR.</p>
+</div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Usuarios</h2>
+  <div class="note">Administre cuentas del personal y sus roles.</div>
+</div>
+
+<div class="card">
+  <h3>Alta de usuario</h3>
+  <form method="post" action="/admin/users/add">
+    <div class="grid">
+      <div>
+        <label>Usuario</label>
+        <input name="username" required/>
+      </div>
+      <div>
+        <label>Nombre</label>
+        <input name="full_name" required/>
+      </div>
+      <div>
+        <label>Contraseña</label>
+        <input type="password" name="password" required/>
+      </div>
+      <div>
+        <label>Rol</label>
+        <select name="role_code" required>
+          {% for r in roles %}
+            <option value="{{ r.code.value }}">{{ r.code.value }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+      <button class="btn" type="submit">Crear</button>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <h3>Listado</h3>
+  <table>
+    <thead><tr><th>Usuario</th><th>Nombre</th><th>Roles</th><th>Activo</th><th>Acciones</th></tr></thead>
+    <tbody>
+      {% for u in users %}
+      <tr>
+        <td>{{ u.username }}</td>
+        <td>{{ u.full_name }}</td>
+        <td>
+          {% for rc in user_roles.get(u.id, []) %}
+            <span class="badge">{{ rc }}</span>
+          {% endfor %}
+        </td>
+        <td><span class="badge">{{ "SI" if u.is_active else "NO" }}</span></td>
+        <td>
+          <form class="inline" method="post" action="/admin/users/{{ u.id }}/toggle">
+            <button class="btn secondary small" type="submit">{{ "Desactivar" if u.is_active else "Activar" }}</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

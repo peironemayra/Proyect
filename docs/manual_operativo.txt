@@ -1,0 +1,35 @@
+Manual operativo breve
+
+1) Alta de carta
+- Ingrese con usuario administrador.
+- Vaya a Productos.
+- Cree categorías.
+- Cree productos y asigne área: cocina o bar.
+- Ajuste stock y disponibilidad.
+
+2) Servicio en salón
+- Vaya a Mesas.
+- Seleccione "Nuevo pedido".
+- Agregue ítems.
+- Envíe el pedido.
+- Cocina y bar cambian estado por ítem.
+- Cuando todos los ítems estén "LISTO", el pedido queda listo para cobro.
+
+3) Caja
+- Abra caja con monto inicial.
+- En pedidos listos, registre pago.
+- El sistema genera número de comprobante y finaliza el pedido.
+- En salón, libera mesa tras el pago.
+- Cierre caja al final de turno.
+
+4) Delivery
+Cliente
+- Ingrese en /cliente/delivery.
+- Registre nombre, teléfono, dirección y el primer ítem.
+- Agregue ítems adicionales y confirme el pedido.
+
+Administración
+- En /delivery/admin, asigne repartidor.
+
+Repartidor
+- En /delivery/my, cambie estado a EN_CAMINO y luego ENTREGADO.

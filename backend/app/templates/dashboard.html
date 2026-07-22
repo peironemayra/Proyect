@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Panel</h2>
+  <div class="note">Roles asignados: {% for r in roles %}<span class="badge">{{ r }}</span> {% endfor %}</div>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h3>Operación</h3>
+    <p class="note">Gestione mesas, pedidos y estados de preparación.</p>
+    <a class="btn" href="/tables">Mesas</a>
+    <a class="btn secondary" href="/orders">Pedidos</a>
+  </div>
+
+  <div class="card">
+    <h3>Producción</h3>
+    <p class="note">Cocina y bar visualizan ítems pendientes y actualizan estados.</p>
+    <a class="btn" href="/kitchen">Cocina</a>
+    <a class="btn secondary" href="/bar">Bar</a>
+  </div>
+
+  <div class="card">
+    <h3>Caja</h3>
+    <p class="note">Apertura y cierre de caja. Registro de pagos y comprobantes.</p>
+    <a class="btn" href="/cash">Caja</a>
+  </div>
+
+  <div class="card">
+    <h3>Administración</h3>
+    <p class="note">Gestione carta, productos, usuarios y repartidores.</p>
+    <a class="btn" href="/admin/products">Productos</a>
+    <a class="btn secondary" href="/admin/users">Usuarios</a>
+    <a class="btn secondary" href="/delivery/admin">Delivery</a>
+  </div>
+</div>
+{% endblock %}

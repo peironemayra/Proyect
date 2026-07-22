@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Pedidos activos</h2>
+  <div class="note">El sistema muestra pedidos en curso. Para pedidos pagados revise reportes en base de datos.</div>
+</div>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr><th>Código</th><th>Canal</th><th>Estado</th><th>Mesa</th><th>Creación</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for o in orders %}
+      <tr>
+        <td>{{ o.code }}</td>
+        <td><span class="badge">{{ o.channel.value }}</span></td>
+        <td><span class="badge">{{ o.status.value }}</span></td>
+        <td>{% if o.table %}{{ o.table.code }}{% else %}-{% endif %}</td>
+        <td>{{ o.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+        <td><a class="btn small" href="/orders/{{ o.id }}">Abrir</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

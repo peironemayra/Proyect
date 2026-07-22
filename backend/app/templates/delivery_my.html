@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Mis entregas</h2>
+  <div class="note">Actualice estado según avance.</div>
+</div>
+
+<div class="card">
+  <table>
+    <thead><tr><th>Pedido</th><th>Estado</th><th>Actualizar</th></tr></thead>
+    <tbody>
+      {% for d in deliveries %}
+      <tr>
+        <td><a href="/orders/{{ d.order_id }}">{{ orders[d.order_id].code if orders.get(d.order_id) else d.order_id }}</a></td>
+        <td><span class="badge">{{ d.status.value }}</span></td>
+        <td>
+          <form method="post" action="/delivery/{{ d.id }}/status">
+            <div class="flex">
+              <div style="min-width:180px;">
+                <select name="status_value">
+                  <option value="ASIGNADO" {% if d.status.value == "ASIGNADO" %}selected{% endif %}>ASIGNADO</option>
+                  <option value="EN_CAMINO" {% if d.status.value == "EN_CAMINO" %}selected{% endif %}>EN_CAMINO</option>
+                  <option value="ENTREGADO" {% if d.status.value == "ENTREGADO" %}selected{% endif %}>ENTREGADO</option>
+                </select>
+              </div>
+              <div><button class="btn small" type="submit">Guardar</button></div>
+            </div>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Mesas</h2>
+  <div class="note">Estados: libre, ocupada, reservada, esperando pedido, fuera de servicio.</div>
+</div>
+
+<div class="card">
+  <h3>Listado</h3>
+  <table>
+    <thead>
+      <tr><th>Código</th><th>Nombre</th><th>Estado</th><th>Acciones</th></tr>
+    </thead>
+    <tbody>
+      {% for t in tables %}
+      <tr>
+        <td>{{ t.code }}</td>
+        <td>{{ t.name }}</td>
+        <td><span class="badge">{{ t.status.value }}</span></td>
+        <td>
+          <form class="inline" method="post" action="/tables/{{ t.id }}/order">
+            <button class="btn small" type="submit">Nuevo pedido</button>
+          </form>
+          <form class="inline" method="post" action="/tables/{{ t.id }}/status">
+            <select name="status_value">
+              {% for s in statuses %}
+                <option value="{{ s }}" {% if s == t.status.value %}selected{% endif %}>{{ s }}</option>
+              {% endfor %}
+            </select>
+            <button class="btn secondary small" type="submit">Cambiar</button>
+          </form>
+          <a class="btn secondary small" href="/cliente/qr/{{ t.code }}">QR</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h3>Agregar mesa</h3>
+  <form method="post" action="/tables/add">
+    <div class="flex">
+      <div style="min-width:240px;">
+        <label>Nombre</label>
+        <input name="name" placeholder="Mesa 1" required/>
+      </div>
+      <div>
+        <button class="btn" type="submit">Agregar</button>
+      </div>
+    </div>
+    <p class="note">El sistema asigna un código secuencial, ejemplo M01, M02.</p>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Cola de {{ area }}</h2>
+  <div class="note">Actualice estado por ítem. El sistema actualiza estado del pedido cuando finaliza la preparación.</div>
+</div>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr><th>Pedido</th><th>Producto</th><th>Cantidad</th><th>Estado</th><th>Acciones</th></tr>
+    </thead>
+    <tbody>
+      {% for it in items %}
+      <tr>
+        <td><a href="/orders/{{ it.order.id }}">{{ it.order.code }}</a></td>
+        <td>{{ it.product.name }}</td>
+        <td>{{ it.quantity }}</td>
+        <td><span class="badge">{{ it.status.value }}</span></td>
+        <td>
+          <form class="inline" method="post" action="/items/{{ it.id }}/prep">
+            <button class="btn secondary small" type="submit">En preparación</button>
+          </form>
+          <form class="inline" method="post" action="/items/{{ it.id }}/ready">
+            <button class="btn small" type="submit">Listo</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

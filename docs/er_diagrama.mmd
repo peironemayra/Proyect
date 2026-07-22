@@ -1,0 +1,15 @@
+erDiagram
+  USERS ||--o{ USER_ROLES : has
+  ROLES ||--o{ USER_ROLES : assigned
+  USERS ||--o{ SESSION_TOKENS : opens
+  TABLES ||--o{ ORDERS : seats
+  CUSTOMERS ||--o{ ADDRESSES : has
+  CUSTOMERS ||--o{ ORDERS : places
+  ADDRESSES ||--o{ ORDERS : ships_to
+  ORDERS ||--o{ ORDER_ITEMS : contains
+  PRODUCTS ||--o{ ORDER_ITEMS : referenced
+  CATEGORIES ||--o{ PRODUCTS : groups
+  ORDERS ||--o| PAYMENTS : settles
+  CASH_SESSIONS ||--o{ CASH_MOVEMENTS : records
+  ORDERS ||--o| DELIVERIES : dispatch
+  USERS ||--o{ DELIVERIES : assigned_to

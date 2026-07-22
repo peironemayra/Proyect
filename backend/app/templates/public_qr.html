@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Pedido en mesa {{ table.code }}</h2>
+  <div class="note">Estado mesa: <span class="badge">{{ table.status.value }}</span> Pedido: <span class="badge">{{ order.status.value }}</span></div>
+</div>
+
+<div class="card">
+  <h3>Agregar producto</h3>
+  <form method="post" action="/cliente/qr/{{ table.code }}/add_item">
+    <div class="grid">
+      <div>
+        <label>Producto</label>
+        <select name="product_id">
+          {% for p in products %}
+            <option value="{{ p.id }}">{{ p.name }} - {{ "%.2f"|format(p.price) }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label>Cantidad</label>
+        <input type="number" name="quantity" value="1" min="1"/>
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+      <button class="btn" type="submit">Agregar</button>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <h3>Mi pedido</h3>
+  <table>
+    <thead><tr><th>Producto</th><th>Cantidad</th><th>Precio</th></tr></thead>
+    <tbody>
+      {% for it in order.items %}
+      <tr><td>{{ it.product.name }}</td><td>{{ it.quantity }}</td><td>{{ "%.2f"|format(it.unit_price) }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div style="margin-top:10px;">
+    <div class="note">Subtotal: {{ "%.2f"|format(subtotal) }}</div>
+    <div><strong>Total: {{ "%.2f"|format(total) }}</strong></div>
+  </div>
+  <form method="post" action="/cliente/qr/{{ table.code }}/send" style="margin-top:12px;">
+    <button class="btn" type="submit">Enviar pedido</button>
+  </form>
+  <p class="note">Luego de enviar, el personal prepara el pedido. El cliente puede revisar el estado en esta pantalla.</p>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Delivery</h2>
+  <div class="note">Asigne repartidor y supervise estado de entrega.</div>
+</div>
+
+<div class="card">
+  <table>
+    <thead><tr><th>Pedido</th><th>Estado</th><th>Repartidor</th><th>Asignar</th></tr></thead>
+    <tbody>
+      {% for d in deliveries %}
+      <tr>
+        <td><a href="/orders/{{ d.order_id }}">{{ orders[d.order_id].code if orders.get(d.order_id) else d.order_id }}</a></td>
+        <td><span class="badge">{{ d.status.value }}</span></td>
+        <td>{% if d.assigned_to %}{{ d.assigned_to.full_name }}{% else %}-{% endif %}</td>
+        <td>
+          <form method="post" action="/delivery/{{ d.id }}/assign">
+            <div class="flex">
+              <div style="min-width:180px;">
+                <select name="user_id">
+                  {% for r in repartidores %}
+                    <option value="{{ r.id }}">{{ r.full_name }} ({{ r.username }})</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div>
+                <button class="btn small" type="submit">Asignar</button>
+              </div>
+            </div>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
